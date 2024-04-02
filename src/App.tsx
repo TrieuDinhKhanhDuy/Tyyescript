@@ -6,9 +6,10 @@ import Header from "./components/Header/Header";
 import { TProduct } from "./interfaces/TProducts";
 import ProductDetail from "./pages/ProductDetail";
 import Shop from "./pages/Shop";
-import { createProduct, getProducts } from "./services/product";
+import { createProduct, deleteProduct, getProducts, updateProduct,} from "./services/product";
 import Dashboard from "./pages/admin/Dashboard";
 import ProductAdd from "./pages/admin/ProductAdd";
+import ProductEdit from "./pages/admin/ProductEdit";
 
 
 function App() {
@@ -28,6 +29,23 @@ function App() {
     navigate("/admin")
    })()
   }
+  
+  const handleEditProduct = (product: TProduct) => {
+    (async () => {
+     const p = await updateProduct(product)
+     setProducts(products.map(i => (i.id === p.id ? p : i  )))
+     navigate("/admin")
+    })()
+   }
+   const handleDeleteProduct = (id : number | undefined ) => {
+    (async () => {
+      const isConfirm = window.confirm('Are you sure you ')
+      if(isConfirm) {
+        const data = await deleteProduct(`${id}`)
+        setProducts(products.filter((i) => i.id !== id))
+      }
+    })()    
+   }
   return (
     <>
       <Header />
@@ -40,9 +58,9 @@ function App() {
 
         {/* admin */}
         <Route path="/admin">
-          <Route index element={<Dashboard products={products}/>} />
+          <Route index element={<Dashboard products={products}  onDelete = {handleDeleteProduct}/>} />
           <Route path="/admin/add" element={<ProductAdd onAdd = {handleAddProduct}/>} />
-          <Route path="/admin/edit/:id" element={<ProductDetail />} />
+          <Route path="/admin/edit/:id" element={<ProductEdit onEdit={handleEditProduct}/>} />
         </Route>
         {/* 404 */}
         <Route path="*" element={<div>404</div>} />

@@ -9,7 +9,7 @@ type Props = {
 const productSchema = Joi.object({
   title : Joi.string().required().min(3).max(255),
   price:Joi.number().required().min(0),
-  description : Joi.string(),
+  description : Joi.string().allow(null,""),
 })
 const ProductAdd = ({onAdd}: Props) => {
   const 

@@ -3,10 +3,14 @@ import { TProduct } from '../../interfaces/TProducts'
 import { Link } from 'react-router-dom'
 
 type Props = {
-  products:TProduct[]
+  products:TProduct[],
+  onDelete : (id : number | undefined) => void;
 }
 
-const Dashboard = ({products}: Props) => {
+const Dashboard = ({products , onDelete}: Props) => {
+  const handleDelete = (id:number | undefined ) => {
+    onDelete(id) 
+  }
   return (
     <div>
       <div>
@@ -32,7 +36,7 @@ const Dashboard = ({products}: Props) => {
               <td>{i.price}</td>
               <td>{i.description}</td>
               <td>
-                <button className='btn btn-danger'>Delete</button>
+                <button className='btn btn-danger' onClick={() => handleDelete(Number(i.id))}>Delete</button>
                 <Link to={`/admin/edit/${i.id}`} className='btn btn-primary'>Update</Link>
               </td>
             </tr>
